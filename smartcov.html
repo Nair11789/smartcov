@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCov - Коворкинг Хаб</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .login-box {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .login-box button:hover {
+            background: #5a67d8;
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .switch-form a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            padding: 8px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .filter-bar {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-bar select, .filter-bar input {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .spaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .space-card {
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .space-card.free {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .space-card.occupied {
+            background: #e0e0e0;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .space-card.selected {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+
+        .space-number {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .space-status {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .space-info {
+            font-size: 11px;
+            margin-top: 8px;
+            color: #666;
+        }
+
+        .space-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .edit-btn, .delete-btn {
+            font-size: 11px;
+            padding: 3px 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .booking-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e7f3ff;
+            border-radius: 10px;
+        }
+
+        .booking-form select, .booking-form input {
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .admin-panel {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .admin-panel h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .add-space-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .add-space-form .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .add-space-form input {
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cancel-btn:hover {
+            background: #c82333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .message-list {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            background: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .message.own {
+            background: #667eea;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .info-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .info-btn:hover {
+            background: #138496;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .warning-text {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success-text {
+            color: #28a745;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // ============ ДАННЫЕ ============
+        let currentUser = null;
+        let selectedSpace = null;
+        let currentFilterDate = new Date().toISOString().split('T')[0];
+        let currentTypeFilter = 'all';
+        
+        // Очистка старых бронирований
+        function cleanOldBookings() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            const now = new Date();
+            const activeBookings = bookings.filter(booking => {
+                const endTime = new Date(booking.endTime);
+                return endTime > now;
+            });
+            
+            if (activeBookings.length !== bookings.length) {
+                localStorage.setItem('bookings', JSON.stringify(activeBookings));
+            }
+        }
+        
+        // Инициализация localStorage
+        function initData() {
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify([
+                    { id: 1, email: 'student@mail.ru', password: '123', name: 'Иван Петров', role: 'student', points: 100 },
+                    { id: 2, email: 'admin@mail.ru', password: 'admin', name: 'Администратор', role: 'admin', points: 500 }
+                ]));
+            }
+            
+            if (!localStorage.getItem('spaces')) {
+                let spaces = [];
+                for (let i = 1; i <= 20; i++) {
+                    spaces.push({
+                        id: i,
+                        number: i,
+                        name: `Стол ${i}`,
+                        createdAt: new Date().toISOString()
+                    });
+                }
+                localStorage.setItem('spaces', JSON.stringify(spaces));
+            }
+            
+            if (!localStorage.getItem('bookings')) {
+                localStorage.setItem('bookings', JSON.stringify([]));
+            }
+            
+            if (!localStorage.getItem('messages')) {
+                localStorage.setItem('messages', JSON.stringify([
+                    { id: 1, userName: 'Администратор', text: 'Добро пожаловать в коворкинг!', time: new Date().toLocaleTimeString() }
+                ]));
+            }
+            
+            cleanOldBookings();
+        }
+        
+        function showMessage(msg, type) {
+            const div = document.createElement('div');
+            div.className = 'notification';
+            div.innerHTML = msg;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+        
+        // ============ ФУНКЦИИ ВХОДА ============
+        function login(email, password) {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showMessage(`Добро пожаловать, ${user.name}!`, 'success');
+                render();
+                return true;
+            }
+            showMessage('Неверный email или пароль!', 'error');
+            return false;
+        }
+        
+        function register(name, email, password) {
+            const users = JSON.parse(localStorage.getItem('users'));
+            if (users.find(u => u.email === email)) {
+                showMessage('Email уже существует!', 'error');
+                return false;
+            }
+            
+            const newUser = {
+                id: users.length + 1,
+                email: email,
+                password: password,
+                name: name,
+                role: 'student',
+                points: 0
+            };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            showMessage('Регистрация успешна! Теперь войдите.', 'success');
+            return true;
+        }
+        
+        function logout() {
+            currentUser = null;
+            selectedSpace = null;
+            localStorage.removeItem('currentUser');
+            render();
+        }
+        
+        // ============ УПРАВЛЕНИЕ СТОЛАМИ (ТОЛЬКО ДЛЯ АДМИНА) ============
+        function addSpace(spaceNumber, spaceName) {
+            if (currentUser.role !== 'admin') {
+                showMessage('Доступ только у администратора!', 'error');
+                return false;
+            }
+            
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const number = parseInt(spaceNumber);
+            
+            if (spaces.find(s => s.number === number)) {
+                showMessage(`Стол с номером ${number} уже существует!`, 'error');
+                return false;
+            }
+            
+            const newSpace = {
+                id: Date.now(),
+                number: number,
+                name: spaceName || `Стол ${number}`,
+                createdAt: new Date().toISOString()
+            };
+            
+            spaces.push(newSpace);
+            spaces.sort((a,b) => a.number - b.number);
+            localStorage.setItem('spaces', JSON.stringify(spaces));
+            showMessage(`✅ Стол ${number} добавлен!`, 'success');
+            render();
+            return true;
+        }
+        
+        function editSpace(spaceId, newNumber, newName) {
+            if (currentUser.role !== 'admin') {
+                showMessage('Доступ только у администратора!', 'error');
+                return false;
+            }
+            
+            let spaces = JSON.parse(localStorage.getItem('spaces'));
+            const spaceIndex = spaces.findIndex(s => s.id === spaceId);
+            
+            if (spaceIndex === -1) {
+                showMessage('Стол не найден!', 'error');
+                return false;
+            }
+            
+            const newNumberInt = parseInt(newNumber);
+            if (spaces.some(s => s.id !== spaceId && s.number === newNumberInt)) {
+                showMessage(`Стол с номером ${newNumberInt} уже существует!`, 'error');
+                return false;
+            }
+            
+            spaces[spaceIndex].number = newNumberInt;
+            spaces[spaceIndex].name = newName || `Стол ${newNumberInt}`;
+            spaces.sort((a,b) => a.number - b.number);
+            localStorage.setItem('spaces', JSON.stringify(spaces));
+            showMessage(`✅ Стол обновлён!`, 'success');
+            render();
+            return true;
+        }
+        
+        function deleteSpace(spaceId) {
+            if (currentUser.role !== 'admin') {
+                showMessage('Доступ только у администратора!', 'error');
+                return false;
+            }
+            
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const space = spaces.find(s => s.id === spaceId);
+            
+            if (!space) {
+                showMessage('Стол не найден!', 'error');
+                return false;
+            }
+            
+            // Проверяем, есть ли активные бронирования на этот стол
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const now = new Date();
+            const hasActiveBookings = bookings.some(b => b.spaceId === spaceId && new Date(b.endTime) > now);
+            
+            if (hasActiveBookings) {
+                showMessage('❌ Нельзя удалить стол с активными бронированиями!', 'error');
+                return false;
+            }
+            
+            const newSpaces = spaces.filter(s => s.id !== spaceId);
+            localStorage.setItem('spaces', JSON.stringify(newSpaces));
+            showMessage(`✅ Стол ${space.number} удалён!`, 'success');
+            
+            if (selectedSpace === spaceId) selectedSpace = null;
+            render();
+            return true;
+        }
+        
+        // ============ ПРОВЕРКА ВРЕМЕНИ ============
+        function isTimeInPast(date, timeSlot, startHour = null) {
+            const now = new Date();
+            const bookingDate = new Date(date);
+            const today = new Date(now.toISOString().split('T')[0]);
+            
+            if (bookingDate < today) return true;
+            
+            if (bookingDate.toDateString() === now.toDateString()) {
+                let slotStartHour = 0;
+                if (timeSlot === 'morning') slotStartHour = 9;
+                else if (timeSlot === 'afternoon') slotStartHour = 12;
+                else if (timeSlot === 'evening') slotStartHour = 18;
+                else if (timeSlot === 'full_day') slotStartHour = 9;
+                else if (startHour !== null) slotStartHour = startHour;
+                else return false;
+                
+                return now.getHours() >= slotStartHour;
+            }
+            return false;
+        }
+        
+        function canCancelBooking(booking) {
+            const now = new Date();
+            const startTime = new Date(booking.startTime);
+            return startTime > now;
+        }
+        
+        // ============ БРОНИРОВАНИЕ ============
+        function checkSpaceAvailability(spaceId, date, timeSlot, startHour = null) {
+            if (isTimeInPast(date, timeSlot, startHour)) {
+                return { available: false, reason: 'Нельзя забронировать прошедшее время' };
+            }
+            
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const spaceBookings = bookings.filter(b => b.spaceId === spaceId && b.date === date);
+            
+            if (timeSlot === 'full_day') {
+                const isTaken = spaceBookings.some(b => b.timeSlot === 'full_day');
+                return { available: !isTaken, reason: isTaken ? 'Этот день уже полностью занят' : null };
+            } else if (timeSlot === 'morning') {
+                const isTaken = spaceBookings.some(b => b.timeSlot === 'morning' || b.timeSlot === 'full_day');
+                return { available: !isTaken, reason: isTaken ? 'Утро уже занято' : null };
+            } else if (timeSlot === 'afternoon') {
+                const isTaken = spaceBookings.some(b => b.timeSlot === 'afternoon' || b.timeSlot === 'full_day');
+                return { available: !isTaken, reason: isTaken ? 'Дневное время уже занято' : null };
+            } else if (timeSlot === 'evening') {
+                const isTaken = spaceBookings.some(b => b.timeSlot === 'evening' || b.timeSlot === 'full_day');
+                return { available: !isTaken, reason: isTaken ? 'Вечер уже занят' : null };
+            } else {
+                const startHourNum = parseInt(startHour);
+                const endHourNum = startHourNum + parseInt(document.getElementById('hoursSelect')?.value || 1);
+                
+                const conflict = spaceBookings.some(b => {
+                    if (b.timeSlot === 'full_day') return true;
+                    if (b.timeSlot === 'morning' && (startHourNum < 12)) return true;
+                    if (b.timeSlot === 'afternoon' && (startHourNum >= 12 && startHourNum < 18)) return true;
+                    if (b.timeSlot === 'evening' && (startHourNum >= 18)) return true;
+                    if (!b.timeSlotType && b.timeSlot && !isNaN(b.timeSlot)) {
+                        const bStart = parseInt(b.timeSlot);
+                        const bEnd = bStart + (b.hours || 1);
+                        return (startHourNum < bEnd && endHourNum > bStart);
+                    }
+                    return false;
+                });
+                
+                return { available: !conflict, reason: conflict ? 'Это время уже занято' : null };
+            }
+        }
+        
+        function bookSpace(spaceId, date, timeSlot, hours = 1) {
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const space = spaces.find(s => s.id === spaceId);
+            
+            if (!space) {
+                showMessage('Стол не найден!', 'error');
+                return false;
+            }
+            
+            let startHourForCheck = null;
+            if (timeSlot !== 'hourly' && timeSlot !== 'morning' && timeSlot !== 'afternoon' && timeSlot !== 'evening' && timeSlot !== 'full_day') {
+                startHourForCheck = timeSlot;
+            } else if (timeSlot === 'morning') {
+                startHourForCheck = 9;
+            } else if (timeSlot === 'afternoon') {
+                startHourForCheck = 12;
+            } else if (timeSlot === 'evening') {
+                startHourForCheck = 18;
+            } else if (timeSlot === 'full_day') {
+                startHourForCheck = 9;
+            }
+            
+            const availability = checkSpaceAvailability(spaceId, date, timeSlot, startHourForCheck);
+            if (!availability.available) {
+                showMessage(availability.reason, 'error');
+                return false;
+            }
+            
+            let endTime = null;
+            let pointsToAdd = 0;
+            let timeSlotDisplay = '';
+            
+            if (timeSlot === 'full_day') {
+                endTime = new Date(date + 'T23:59:59');
+                pointsToAdd = 100;
+                timeSlotDisplay = 'Весь день (09:00-22:00)';
+            } else if (timeSlot === 'morning') {
+                endTime = new Date(date + 'T12:00:00');
+                pointsToAdd = 40;
+                timeSlotDisplay = 'Утро (09:00-12:00)';
+            } else if (timeSlot === 'afternoon') {
+                endTime = new Date(date + 'T18:00:00');
+                pointsToAdd = 50;
+                timeSlotDisplay = 'День (12:00-18:00)';
+            } else if (timeSlot === 'evening') {
+                endTime = new Date(date + 'T22:00:00');
+                pointsToAdd = 40;
+                timeSlotDisplay = 'Вечер (18:00-22:00)';
+            } else {
+                endTime = new Date(date + 'T' + timeSlot.padStart(2, '0') + ':00:00');
+                endTime.setHours(endTime.getHours() + parseInt(hours));
+                pointsToAdd = parseInt(hours) * 10;
+                timeSlotDisplay = `${timeSlot}:00 - ${endTime.getHours()}:00`;
+            }
+            
+            const booking = {
+                id: Date.now(),
+                spaceId: spaceId,
+                spaceNumber: space.number,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                date: date,
+                timeSlot: timeSlot,
+                timeSlotDisplay: timeSlotDisplay,
+                hours: timeSlot === 'full_day' ? 13 : (timeSlot === 'morning' || timeSlot === 'afternoon' || timeSlot === 'evening' ? 6 : parseInt(hours)),
+                startTime: date + 'T' + (timeSlot === 'morning' ? '09:00:00' : (timeSlot === 'afternoon' ? '12:00:00' : (timeSlot === 'evening' ? '18:00:00' : timeSlot.padStart(2, '0') + ':00:00'))),
+                endTime: endTime.toISOString()
+            };
+            
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.id === currentUser.id);
+            user.points += pointsToAdd;
+            localStorage.setItem('users', JSON.stringify(users));
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showMessage(`✅ ${space.name} забронирован на ${timeSlotDisplay} (${new Date(date).toLocaleDateString()})! +${pointsToAdd} баллов`, 'success');
+            return true;
+        }
+        
+        function getSpaceStatus(spaceId, date) {
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const now = new Date();
+            const spaceBookings = bookings.filter(b => b.spaceId === spaceId && b.date === date);
+            
+            if (spaceBookings.length === 0) return 'free';
+            
+            const activeBookings = spaceBookings.filter(b => {
+                const end = new Date(b.endTime);
+                return end > now;
+            });
+            
+            if (activeBookings.length === 0) return 'free';
+            if (activeBookings.some(b => b.timeSlot === 'full_day')) return 'full_day';
+            return 'partial';
+        }
+        
+        function getSpaceBookingsInfo(spaceId, date) {
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const now = new Date();
+            const spaceBookings = bookings.filter(b => b.spaceId === spaceId && b.date === date);
+            const activeBookings = spaceBookings.filter(b => new Date(b.endTime) > now);
+            
+            if (activeBookings.length === 0) return null;
+            return activeBookings.map(b => b.timeSlotDisplay).join(', ');
+        }
+        
+        function getNextFreeTime(spaceId) {
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const now = new Date();
+            
+            const spaceBookings = bookings.filter(b => b.spaceId === spaceId);
+            const futureBookings = spaceBookings.filter(b => new Date(b.endTime) > now);
+            
+            if (futureBookings.length === 0) return 'Сейчас свободно';
+            
+            futureBookings.sort((a,b) => new Date(a.startTime) - new Date(b.startTime));
+            
+            const nextBooking = futureBookings[0];
+            const endTime = new Date(nextBooking.endTime);
+            return `Освободится ${endTime.toLocaleString()}`;
+        }
+        
+        function cancelBooking(bookingId) {
+            let bookings = JSON.parse(localStorage.getItem('bookings'));
+            const booking = bookings.find(b => b.id === bookingId);
+            
+            if (booking) {
+                if (!canCancelBooking(booking)) {
+                    showMessage('❌ Нельзя отменить уже начавшееся бронирование!', 'error');
+                    return;
+                }
+                
+                bookings = bookings.filter(b => b.id !== bookingId);
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                showMessage('✅ Бронирование отменено', 'success');
+                render();
+            }
+        }
+        
+        function sendMessage(text) {
+            if (!text.trim()) return;
+            const messages = JSON.parse(localStorage.getItem('messages'));
+            messages.push({
+                id: Date.now(),
+                userName: currentUser.name,
+                text: text,
+                time: new Date().toLocaleTimeString()
+            });
+            localStorage.setItem('messages', JSON.stringify(messages));
+            render();
+        }
+        
+        // ============ ОТОБРАЖЕНИЕ ============
+        function renderSpaces() {
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const selectedDate = currentFilterDate;
+            const filterValue = currentTypeFilter;
+            
+            let filteredSpaces = spaces;
+            if (filterValue === 'free') {
+                filteredSpaces = spaces.filter(space => getSpaceStatus(space.id, selectedDate) === 'free');
+            } else if (filterValue === 'occupied') {
+                filteredSpaces = spaces.filter(space => getSpaceStatus(space.id, selectedDate) !== 'free');
+            }
+            
+            return `
+                <h2>📍 Карта коворкинга</h2>
+                <div class="filter-bar">
+                    <label>📅 Дата:</label>
+                    <input type="date" id="dateFilter" value="${selectedDate}" min="${new Date().toISOString().split('T')[0]}" onchange="changeDate()">
+                    <label>🔍 Фильтр:</label>
+                    <select id="typeFilter" onchange="changeFilter()">
+                        <option value="all" ${filterValue === 'all' ? 'selected' : ''}>Все места</option>
+                        <option value="free" ${filterValue === 'free' ? 'selected' : ''}>Только свободные</option>
+                        <option value="occupied" ${filterValue === 'occupied' ? 'selected' : ''}>Только занятые</option>
+                    </select>
+                </div>
+                
+                <div class="spaces-grid">
+                    ${filteredSpaces.map(space => {
+                        const status = getSpaceStatus(space.id, selectedDate);
+                        const statusText = status === 'free' ? '🟢 Свободно' : (status === 'full_day' ? '🔴 Занят весь день' : '🟡 Частично занят');
+                        const bookingsInfo = getSpaceBookingsInfo(space.id, selectedDate);
+                        
+                        return `
+                            <div class="space-card ${status === 'free' ? 'free' : 'occupied'} ${selectedSpace === space.id ? 'selected' : ''}" 
+                                 onclick="selectSpace(${space.id})">
+                                <div class="space-number">${space.name}</div>
+                                <div class="space-status">${statusText}</div>
+                                ${bookingsInfo ? `<div class="space-info">📅 ${bookingsInfo}</div>` : ''}
+                                <button class="info-btn" onclick="event.stopPropagation(); showSpaceInfo(${space.id})">ℹ️ Когда освободится?</button>
+                                ${currentUser && currentUser.role === 'admin' ? `
+                                    <div class="space-actions">
+                                        <button class="edit-btn" onclick="event.stopPropagation(); showEditModal(${space.id}, ${space.number}, '${space.name}')">✏️ Ред.</button>
+                                        <button class="delete-btn" onclick="event.stopPropagation(); deleteSpace(${space.id})">🗑️ Удалить</button>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                ${selectedSpace ? renderBookingForm() : ''}
+                
+                ${currentUser && currentUser.role === 'admin' ? `
+                    <div class="admin-panel">
+                        <h3>➕ Управление столами (Админ)</h3>
+                        <div class="add-space-form">
+                            <div class="form-group">
+                                <label>Номер стола:</label>
+                                <input type="number" id="newSpaceNumber" placeholder="Например: 21" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Название стола:</label>
+                                <input type="text" id="newSpaceName" placeholder="Например: Стол 21">
+                            </div>
+                            <button onclick="addNewSpace()">➕ Добавить стол</button>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+        
+        function renderBookingForm() {
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const space = spaces.find(s => s.id === selectedSpace);
+            const selectedDate = currentFilterDate;
+            const now = new Date();
+            const isToday = selectedDate === now.toISOString().split('T')[0];
+            const currentHour = now.getHours();
+            
+            let availableHours = [9,10,11,12,13,14,15,16,17,18,19,20];
+            if (isToday) {
+                availableHours = availableHours.filter(h => h > currentHour);
+            }
+            
+            return `
+                <div class="booking-form">
+                    <h3>📝 Бронирование ${space.name} на ${new Date(selectedDate).toLocaleDateString()}</h3>
+                    
+                    ${isToday && availableHours.length === 0 ? `
+                        <div class="warning-text">⚠️ На сегодня уже нельзя забронировать, так как все часы прошли. Выберите другую дату.</div>
+                    ` : ''}
+                    
+                    <div style="margin: 15px 0;">
+                        <label>Выберите тип бронирования:</label>
+                        <select id="bookingType" onchange="toggleBookingOptions()">
+                            <option value="hourly">📅 Почасовое бронирование</option>
+                            <option value="morning" ${isToday && currentHour >= 9 ? 'disabled' : ''}>🌅 Утро (09:00-12:00) - 40 баллов</option>
+                            <option value="afternoon" ${isToday && currentHour >= 12 ? 'disabled' : ''}>☀️ День (12:00-18:00) - 50 баллов</option>
+                            <option value="evening" ${isToday && currentHour >= 18 ? 'disabled' : ''}>🌙 Вечер (18:00-22:00) - 40 баллов</option>
+                            <option value="full_day" ${isToday && currentHour >= 9 ? 'disabled' : ''}>📆 Весь день (09:00-22:00) - 100 баллов</option>
+                        </select>
+                        ${isToday ? '<div class="warning-text">⚠️ Недоступные варианты уже начались</div>' : ''}
+                    </div>
+                    
+                    <div id="hourlyOptions" style="display: none;">
+                        <label>Время начала:</label>
+                        <select id="startHour">
+                            ${availableHours.map(h => `<option value="${h}">${h}:00</option>`).join('')}
+                        </select>
+                        
+                        <label>Количество часов:</label>
+                        <select id="hoursSelect">
+                            <option value="1">1 час (10 баллов)</option>
+                            <option value="2">2 часа (20 баллов)</option>
+                            <option value="3">3 часа (30 баллов)</option>
+                            <option value="4">4 часа (40 баллов)</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button onclick="confirmBooking()" ${isToday && availableHours.length === 0 ? 'disabled' : ''}>✅ Подтвердить бронирование</button>
+                        <button onclick="cancelSelect()" style="background: #6c757d; margin-left: 10px;">❌ Отмена</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function toggleBookingOptions() {
+            const type = document.getElementById('bookingType')?.value;
+            const hourlyOptions = document.getElementById('hourlyOptions');
+            if (hourlyOptions) {
+                hourlyOptions.style.display = type === 'hourly' ? 'block' : 'none';
+            }
+        }
+        
+        function showSpaceInfo(spaceId) {
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const space = spaces.find(s => s.id === spaceId);
+            const nextFree = getNextFreeTime(spaceId);
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 2000;
+            `;
+            
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const now = new Date();
+            const activeBookings = bookings.filter(b => b.spaceId === spaceId && new Date(b.endTime) > now).sort((a,b) => new Date(a.startTime) - new Date(b.startTime));
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 15px; padding: 30px; max-width: 500px; width: 90%;">
+                    <h2>${space.name}</h2>
+                    <p><strong>${nextFree}</strong></p>
+                    
+                    ${activeBookings.length > 0 ? `
+                        <h3>📅 Текущие бронирования:</h3>
+                        <ul>
+                            ${activeBookings.slice(0,5).map(b => `
+                                <li>${new Date(b.date).toLocaleDateString()}: ${b.timeSlotDisplay} (${b.userName})</li>
+                            `).join('')}
+                        </ul>
+                    ` : '<p>Нет активных бронирований</p>'}
+                    
+                    <button onclick="this.closest('div').parentElement.remove()" style="margin-top: 20px;">Закрыть</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        function showEditModal(spaceId, currentNumber, currentName) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>✏️ Редактировать стол</h3>
+                    <div class="form-group">
+                        <label>Номер стола:</label>
+                        <input type="number" id="editNumber" value="${currentNumber}" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Название стола:</label>
+                        <input type="text" id="editName" value="${currentName}">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="saveEditSpace(${spaceId})">💾 Сохранить</button>
+                        <button onclick="this.closest('.modal').remove()" style="background: #6c757d;">❌ Отмена</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function saveEditSpace(spaceId) {
+            const newNumber = document.getElementById('editNumber').value;
+            const newName = document.getElementById('editName').value;
+            if (newNumber) {
+                editSpace(spaceId, newNumber, newName);
+                document.querySelector('.modal')?.remove();
+            } else {
+                showMessage('Введите номер стола', 'error');
+            }
+        }
+        
+        function addNewSpace() {
+            const number = document.getElementById('newSpaceNumber').value;
+            const name = document.getElementById('newSpaceName').value;
+            if (number) {
+                addSpace(number, name);
+                document.getElementById('newSpaceNumber').value = '';
+                document.getElementById('newSpaceName').value = '';
+            } else {
+                showMessage('Введите номер стола', 'error');
+            }
+        }
+        
+        function renderMyBookings() {
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const myBookings = bookings.filter(b => b.userId === currentUser.id);
+            const now = new Date();
+            
+            if (myBookings.length === 0) {
+                return '<p>📭 У вас нет активных бронирований</p>';
+            }
+            
+            return `
+                <h2>📅 Мои бронирования</h2>
+                <tr>
+                    <thead>
+                        <tr>
+                            <th>Стол</th>
+                            <th>Дата</th>
+                            <th>Время</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${myBookings.map(booking => {
+                            const end = new Date(booking.endTime);
+                            const start = new Date(booking.startTime);
+                            const isActive = end > now;
+                            const canCancel = canCancelBooking(booking);
+                            
+                            let statusText = '';
+                            let statusClass = '';
+                            if (!isActive) {
+                                statusText = '⏰ Завершено';
+                                statusClass = 'warning-text';
+                            } else if (!canCancel) {
+                                statusText = '🔴 Идёт сейчас';
+                                statusClass = 'warning-text';
+                            } else {
+                                statusText = '🟢 Активно';
+                                statusClass = 'success-text';
+                            }
+                            
+                            return `
+                                <tr>
+                                    <td>Стол ${booking.spaceNumber}</td>
+                                    <td>${new Date(booking.date).toLocaleDateString()}</td>
+                                    <td>${booking.timeSlotDisplay}</td>
+                                    <td><span class="${statusClass}">${statusText}</span></td>
+                                    <td>${canCancel && isActive ? `<button class="cancel-btn" onclick="cancelBooking(${booking.id})">Отменить</button>` : (isActive ? '<span class="warning-text">Нельзя отменить</span>' : '-')}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function renderRating() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const sorted = [...users].sort((a,b) => b.points - a.points);
+            
+            return `
+                <h2>🏆 Рейтинг студентов</h2>
+                <div style="background: gold; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3>Ваши баллы: ${currentUser.points}</h3>
+                    <small>Баллы начисляются за бронирование: 10 баллов/час</small>
+                </div>
+                <table>
+                    <thead><tr><th>#</th><th>Имя</th><th>Баллы</th><th>Статус</th></tr></thead>
+                    <tbody>
+                        ${sorted.map((user, i) => `
+                            <tr>
+                                <td>${i+1}</td>
+                                <td>${user.name} ${user.id === currentUser.id ? '(Вы)' : ''}</td>
+                                <td>${user.points}</td>
+                                <td>${i === 0 ? '👑 Лидер' : (i < 3 ? '🏅 Призёр' : '📈 Участник')}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function renderChat() {
+            const messages = JSON.parse(localStorage.getItem('messages'));
+            
+            setTimeout(() => {
+                const messageList = document.getElementById('messageList');
+                if (messageList) messageList.scrollTop = messageList.scrollHeight;
+            }, 100);
+            
+            return `
+                <h2>💬 Общий чат</h2>
+                <div class="message-list" id="messageList">
+                    ${messages.map(msg => `
+                        <div class="message ${msg.userName === currentUser.name ? 'own' : ''}">
+                            <strong>${msg.userName}:</strong> ${msg.text}<br>
+                            <small>${msg.time}</small>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Напишите сообщение..." onkeypress="if(event.key==='Enter') sendChat()">
+                    <button onclick="sendChat()">Отправить</button>
+                </div>
+            `;
+        }
+        
+        function renderAdmin() {
+            if (currentUser.role !== 'admin') return '';
+            
+            const bookings = JSON.parse(localStorage.getItem('bookings'));
+            const spaces = JSON.parse(localStorage.getItem('spaces'));
+            const users = JSON.parse(localStorage.getItem('users'));
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = bookings.filter(b => b.date === today);
+            const now = new Date();
+            const activeBookings = bookings.filter(b => new Date(b.endTime) > now);
+            
+            return `
+                <div style="margin-top: 30px; border-top: 2px solid #ddd; padding-top: 20px;">
+                    <h2>👑 Панель администратора</h2>
+                    <div class="stats">
+                        <div class="stat-card"><div class="stat-number">${activeBookings.length}</div><div>Активных бронирований</div></div>
+                        <div class="stat-card"><div class="stat-number">${todayBookings.length}</div><div>Бронирований на сегодня</div></div>
+                        <div class="stat-card"><div class="stat-number">${spaces.length}</div><div>Всего мест</div></div>
+                        <div class="stat-card"><div class="stat-number">${users.length}</div><div>Пользователей</div></div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderAuth() {
+            return `
+                <div class="login-box">
+                    <h2>🚀 SmartCov</h2>
+                    <p style="text-align: center; margin-bottom: 20px;">Коворкинг с расширенным бронированием</p>
+                    <div id="authForm">
+                        <input type="email" id="email" placeholder="Email" value="student@mail.ru">
+                        <input type="password" id="password" placeholder="Пароль" value="123">
+                        <button onclick="doLogin()">Войти</button>
+                        <div class="switch-form">
+                            <a onclick="showRegister()">Зарегистрироваться</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showRegister() {
+            const form = document.getElementById('authForm');
+            if (form) {
+                form.innerHTML = `
+                    <input type="text" id="regName" placeholder="Имя">
+                    <input type="email" id="regEmail" placeholder="Email">
+                    <input type="password" id="regPassword" placeholder="Пароль">
+                    <button onclick="doRegister()">Зарегистрироваться</button>
+                    <div class="switch-form">
+                        <a onclick="showLogin()">Уже есть аккаунт? Войти</a>
+                    </div>
+                `;
+            }
+        }
+        
+        function showLogin() {
+            const form = document.getElementById('authForm');
+            if (form) {
+                form.innerHTML = `
+                    <input type="email" id="email" placeholder="Email" value="student@mail.ru">
+                    <input type="password" id="password" placeholder="Пароль" value="123">
+                    <button onclick="doLogin()">Войти</button>
+                    <div class="switch-form">
+                        <a onclick="showRegister()">Зарегистрироваться</a>
+                    </div>
+                `;
+            }
+        }
+        
+        function doLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            login(email, password);
+        }
+        
+        function doRegister() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            if (name && email && password) {
+                register(name, email, password);
+                showLogin();
+            } else {
+                showMessage('Заполните все поля', 'error');
+            }
+        }
+        
+        let currentTab = 'spaces';
+        
+        function setTab(tab) {
+            currentTab = tab;
+            render();
+        }
+        
+        function selectSpace(id) {
+            const selectedDate = currentFilterDate;
+            const status = getSpaceStatus(id, selectedDate);
+            if (status !== 'full_day') {
+                selectedSpace = id;
+                render();
+            } else {
+                showMessage('Это место занято на весь день!', 'error');
+            }
+        }
+        
+        function confirmBooking() {
+            const type = document.getElementById('bookingType')?.value;
+            const selectedDate = currentFilterDate;
+            
+            if (!type) return;
+            
+            if (type === 'hourly') {
+                const startHour = document.getElementById('startHour')?.value;
+                const hours = document.getElementById('hoursSelect')?.value;
+                if (startHour && hours && bookSpace(selectedSpace, selectedDate, startHour, hours)) {
+                    selectedSpace = null;
+                    render();
+                }
+            } else {
+                if (bookSpace(selectedSpace, selectedDate, type)) {
+                    selectedSpace = null;
+                    render();
+                }
+            }
+        }
+        
+        function cancelSelect() {
+            selectedSpace = null;
+            render();
+        }
+        
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            if (input && input.value.trim()) {
+                sendMessage(input.value);
+                input.value = '';
+            }
+        }
+        
+        function changeDate() {
+            const dateInput = document.getElementById('dateFilter');
+            if (dateInput) {
+                currentFilterDate = dateInput.value;
+                selectedSpace = null;
+                render();
+            }
+        }
+        
+        function changeFilter() {
+            const filterSelect = document.getElementById('typeFilter');
+            if (filterSelect) {
+                currentTypeFilter = filterSelect.value;
+                selectedSpace = null;
+                render();
+            }
+        }
+        
+        function renderMain() {
+            return `
+                <div class="container">
+                    <div class="header">
+                        <h1>🚀 SmartCov - Коворкинг Хаб</h1>
+                        <div class="user-panel">
+                            <span>👤 ${currentUser.name} (${currentUser.points} ⭐) ${currentUser.role === 'admin' ? '👑 Админ' : ''}</span>
+                            <button class="logout-btn" onclick="logout()">Выйти</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <button class="tab ${currentTab === 'spaces' ? 'active' : ''}" onclick="setTab('spaces')">📍 Места</button>
+                        <button class="tab ${currentTab === 'bookings' ? 'active' : ''}" onclick="setTab('bookings')">📅 Мои брони</button>
+                        <button class="tab ${currentTab === 'rating' ? 'active' : ''}" onclick="setTab('rating')">🏆 Рейтинг</button>
+                        <button class="tab ${currentTab === 'chat' ? 'active' : ''}" onclick="setTab('chat')">💬 Чат</button>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="page ${currentTab === 'spaces' ? 'active' : ''}">
+                            ${renderSpaces()}
+                        </div>
+                        <div class="page ${currentTab === 'bookings' ? 'active' : ''}">
+                            ${renderMyBookings()}
+                            ${renderAdmin()}
+                        </div>
+                        <div class="page ${currentTab === 'rating' ? 'active' : ''}">
+                            ${renderRating()}
+                        </div>
+                        <div class="page ${currentTab === 'chat' ? 'active' : ''}">
+                            ${renderChat()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function render() {
+            const app = document.getElementById('app');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            cleanOldBookings();
+            
+            if (savedUser && !currentUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+            
+            if (currentUser) {
+                app.innerHTML = renderMain();
+                const dateInput = document.getElementById('dateFilter');
+                if (dateInput && dateInput.value !== currentFilterDate) {
+                    dateInput.value = currentFilterDate;
+                }
+                const filterSelect = document.getElementById('typeFilter');
+                if (filterSelect && filterSelect.value !== currentTypeFilter) {
+                    filterSelect.value = currentTypeFilter;
+                }
+                toggleBookingOptions();
+            } else {
+                app.innerHTML = renderAuth();
+            }
+        }
+        
+        window.doLogin = doLogin;
+        window.doRegister = doRegister;
+        window.showRegister = showRegister;
+        window.showLogin = showLogin;
+        window.logout = logout;
+        window.setTab = setTab;
+        window.selectSpace = selectSpace;
+        window.confirmBooking = confirmBooking;
+        window.cancelSelect = cancelSelect;
+        window.cancelBooking = cancelBooking;
+        window.sendChat = sendChat;
+        window.changeDate = changeDate;
+        window.changeFilter = changeFilter;
+        window.toggleBookingOptions = toggleBookingOptions;
+        window.showSpaceInfo = showSpaceInfo;
+        window.addSpace = addSpace;
+        window.editSpace = editSpace;
+        window.deleteSpace = deleteSpace;
+        window.addNewSpace = addNewSpace;
+        window.showEditModal = showEditModal;
+        window.saveEditSpace = saveEditSpace;
+        
+        initData();
+        render();
+        
+        setInterval(() => {
+            if (currentUser && currentTab === 'chat') {
+                const messageList = document.getElementById('messageList');
+                if (messageList) {
+                    const messages = JSON.parse(localStorage.getItem('messages'));
+                    const html = messages.map(msg => `
+                        <div class="message ${msg.userName === currentUser.name ? 'own' : ''}">
+                            <strong>${msg.userName}:</strong> ${msg.text}<br>
+                            <small>${msg.time}</small>
+                        </div>
+                    `).join('');
+                    if (messageList.innerHTML !== html) {
+                        messageList.innerHTML = html;
+                        messageList.scrollTop = messageList.scrollHeight;
+                    }
+                }
+            }
+            if (currentUser && (currentTab === 'spaces' || currentTab === 'bookings')) {
+                render();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
